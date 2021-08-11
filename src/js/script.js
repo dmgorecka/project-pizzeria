@@ -382,8 +382,9 @@
     remove(cartProduct){
       const thisCart = this;
       // usunięcie reprezentacji produktu z HTML-a
-      const indexOfCartProduct = thisCart.products.indexOf(cartProduct);
+      cartProduct.dom.wrapper.remove();
       // usunięcie informacji o danym produkcie z tablicy thisCart.products
+      const indexOfCartProduct = thisCart.products.indexOf(cartProduct);
       thisCart.products.splice(indexOfCartProduct, 1);
       // wywołanie metody update w celu przeliczenia sum po usunięciu produktu
       thisCart.update();

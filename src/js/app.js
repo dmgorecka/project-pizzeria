@@ -3,6 +3,39 @@ import Product from './components/Product.js';
 import Cart from './components/Cart.js';
 
 const app = {
+  initPages: function(){
+    const thisApp = this;
+    thisApp.pages = document.querySelector(select.containerOf.pages).children;
+    thisApp.navLinks = document.querySelectorAll(select.widgets.nav.links);
+    const idFromHash = window.location.hash.replace('#/', '');
+    let pageMatchingHash = thisApp.pages[0].id;
+    for (let page of thisApp.pages){
+      if(page.id == idFromHash){
+        pageMatchingHash = page.id;
+        break;
+      }
+    }
+    thisApp.activatePage(pageMatchingHash);
+    for (let link of thisApp.navLinks){
+      link.addEventListener('click', function(event){
+        const clickedElement = this;
+        event.preventDefault();
+        const id = clickedElement.getAttribute('href').replace('#', '');
+        thisApp.activatePage(id);
+        //change URL hash
+        window.location.hash = '#/' + id;
+      });
+    }
+  },
+  activatePage: function(pageID){
+    const thisApp = this;
+    for(let page of thisApp.pages){
+      page.classList.toggle(classNames.pages.active, page.id == pageID);
+    }
+    for(let link of thisApp.navLinks){
+      link.classList.toggle(classNames.nav.active, link.getAttribute('href') == '#' + pageID);
+    }
+  },
   initMenu: function(){
     const thisApp = this;
     console.log('thisApp.data:', thisApp.data);
@@ -34,7 +67,7 @@ const app = {
     console.log('classNames:', classNames);
     console.log('settings:', settings);
     console.log('templates:', templates);
-
+    thisApp.initPages();
     thisApp.initData();
     thisApp.initCart();
   },

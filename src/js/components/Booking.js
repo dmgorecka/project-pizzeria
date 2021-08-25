@@ -37,9 +37,9 @@ class Booking{
     //console.log('getData params', params);
 
     const urls = {
-      bookings: settings.db.url + '/' + settings.db.booking + '?' + params.booking.join('&'),
-      eventsCurrent: settings.db.url + '/' + settings.db.event + '?' + params.eventsCurrent.join('&'),
-      eventsRepeat: settings.db.url + '/' + settings.db.event + '?' + params.eventsRepeat.join('&'),
+      bookings: settings.db.url + '/' + settings.db.bookings + '?' + params.booking.join('&'),
+      eventsCurrent: settings.db.url + '/' + settings.db.events + '?' + params.eventsCurrent.join('&'),
+      eventsRepeat: settings.db.url + '/' + settings.db.events + '?' + params.eventsRepeat.join('&'),
     };
     //console.log('getData urls', urls);
 

@@ -1,9 +1,10 @@
-import {settings, select, classNames, templates} from './settings.js';
+import {settings, select, classNames} from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
 import Booking from './components/Booking.js';
+import Home from './components/Home.js';
 
-const app = {
+export const app = {
   initPages: function(){
     const thisApp = this;
     thisApp.pages = document.querySelector(select.containerOf.pages).children;
@@ -44,6 +45,12 @@ const app = {
       new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
     }
   },
+  initHome: function(){
+    const thisApp = this;
+
+    const homeContainer = document.querySelector(select.containerOf.home);
+    thisApp.home = new Home(homeContainer);
+  },
   initData: function(){
     const thisApp = this;
     thisApp.data = {};
@@ -63,11 +70,12 @@ const app = {
   },
   init: function(){
     const thisApp = this;
-    console.log('*** App starting ***');
-    console.log('thisApp:', thisApp);
-    console.log('classNames:', classNames);
-    console.log('settings:', settings);
-    console.log('templates:', templates);
+    // console.log('*** App starting ***');
+    // console.log('thisApp:', thisApp);
+    // console.log('classNames:', classNames);
+    // console.log('settings:', settings);
+    // console.log('templates:', templates);
+    thisApp.initHome();
     thisApp.initPages();
     thisApp.initData();
     thisApp.initCart();
@@ -89,4 +97,6 @@ const app = {
   },
 };
 app.init();
+
+
 

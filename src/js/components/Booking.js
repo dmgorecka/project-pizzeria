@@ -232,7 +232,7 @@ class Booking{
     const payload = {
       date: thisBooking.datePicker.value,
       hour: thisBooking.hourPicker.value,
-      table: thisBooking.selectedTable,
+      table: parseInt(thisBooking.selectedTableId),
       duration: parseInt(thisBooking.hoursAmount.value),
       ppl: parseInt(thisBooking.peopleAmount.value),
       starters: [],
@@ -258,8 +258,10 @@ class Booking{
       .then(function(response){
         return response.json();
       // eslint-disable-next-line no-unused-vars
-      }).then(function(parsedResponse){
+      }).then(function(){
         thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table);
+        thisBooking.updateDOM();
+        thisBooking.initTables();
       });
   }
 

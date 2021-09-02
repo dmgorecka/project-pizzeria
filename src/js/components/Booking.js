@@ -201,8 +201,8 @@ class Booking{
     thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.widgets.booking.tables);
     thisBooking.dom.tablesWrapper = thisBooking.dom.wrapper.querySelector(select.containerOf.tables);
     thisBooking.dom.bookingForm = thisBooking.dom.wrapper.querySelector('.booking-form');
-    thisBooking.dom.phone = thisBooking.dom.wrapper.querySelector('.phone');
-    thisBooking.dom.address = thisBooking.dom.wrapper.querySelector('.adress');
+    thisBooking.dom.phone = thisBooking.dom.bookingForm.querySelector('input[name="phone"]');
+    thisBooking.dom.address = thisBooking.dom.bookingForm.querySelector('input[name="address"]');
     thisBooking.dom.starters = thisBooking.dom.wrapper.querySelectorAll(select.widgets.booking.starters);
 
   }
@@ -236,8 +236,8 @@ class Booking{
       duration: parseInt(thisBooking.hoursAmount.value),
       ppl: parseInt(thisBooking.peopleAmount.value),
       starters: [],
-      phone: thisBooking.dom.phone,
-      address: thisBooking.dom.address,
+      phone: thisBooking.dom.phone.value,
+      address: thisBooking.dom.address.value,
     };
 
     for (let starter of thisBooking.dom.starters) {

@@ -10,7 +10,7 @@ class Booking{
     thisBooking.render(element);
     thisBooking.initWidgets();
     thisBooking.getData();
-    thisBooking.initTables();
+    thisBooking.selectedTableId;
   }
   getData() {
     const thisBooking = this;
@@ -86,13 +86,13 @@ class Booking{
       if(item.repeat == 'daily'){
         for(let loopDate = minDate; loopDate <= maxDate; loopDate = utils.addDays(loopDate, 1)){
           console.log(loopDate);
-          //thisBooking.makeBooked(utils.dateToStr(loopDate), item.hour, item.duration, item.table);
+          thisBooking.makeBooked(utils.dateToStr(loopDate), item.hour, item.duration, item.table);
         }
       }
     }
 
     // //console.log('thisBooking.booked', thisBooking.booked);
-    // thisBooking.updateDOM();
+    thisBooking.updateDOM();
   }
 
   makeBooked(date, hour, duration, table){
@@ -148,14 +148,18 @@ class Booking{
     }
   }
 
-  initTables(){
+  initTables(event){
     const thisBooking = this;
 
-    thisBooking.dom.tablesWrapper.addEventListener('click', function(event){
-      event.preventDefault();
-
+    //thisBooking.dom.tablesWrapper.addEventListener('click', function(event){
+    //event.preventDefault();
+    if(event == undefined){
+      for(let table of thisBooking.dom.tables){
+        table.classList.remove(classNames.booking.tableSelected);
+      }
+      thisBooking.selectedTableId = null;
+    } else {
       const clickedElement = event.target;
-
       if(clickedElement.hasAttribute(settings.booking.tableIdAttribute)){
         const bookedTable = clickedElement.classList.contains(classNames.booking.tableBooked);
         const selectedTable = clickedElement.classList.contains(classNames.booking.selectedTable);
@@ -163,24 +167,25 @@ class Booking{
 
         if(!bookedTable){
 
-          thisBooking.selectedTable.tableId = selectedTableId;
-          clickedElement.classList.add(classNames.booking.selectedTable);
+          thisBooking.selectedTableId = selectedTableId;
+          clickedElement.classList.toggle(classNames.booking.tableSelected);
 
           for(let table of thisBooking.dom.tables){
             if(table !== clickedElement){
-              table.classList.remove(classNames.booking.selectedTable);
+              table.classList.remove(classNames.booking.tableSelected);
             }
           }
 
           if(selectedTable){
-            clickedElement.classList.remove(classNames.booking.selectedTable);
+            clickedElement.classList.remove(classNames.booking.tableSelected);
           }
 
         } else if(bookedTable){
           alert('This table is unavailable, please select another one');
         }
       }
-    });
+
+    }
   }
 
   render(element){
@@ -195,6 +200,11 @@ class Booking{
     thisBooking.dom.hourPicker = thisBooking.dom.wrapper.querySelector(select.widgets.hourPicker.wrapper);
     thisBooking.dom.tables = thisBooking.dom.wrapper.querySelectorAll(select.widgets.booking.tables);
     thisBooking.dom.tablesWrapper = thisBooking.dom.wrapper.querySelector(select.containerOf.tables);
+    thisBooking.dom.bookingForm = thisBooking.dom.wrapper.querySelector('.booking-form');
+    thisBooking.dom.phone = thisBooking.dom.wrapper.querySelector('.phone');
+    thisBooking.dom.address = thisBooking.dom.wrapper.querySelector('.adress');
+    thisBooking.dom.starters = thisBooking.dom.wrapper.querySelectorAll(select.widgets.booking.starters);
+
   }
 
   initWidgets(){
@@ -205,6 +215,14 @@ class Booking{
     thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
     thisBooking.dom.wrapper.addEventListener('updated', function(){
       thisBooking.updateDOM();
+      thisBooking.initTables();
+    });
+    thisBooking.dom.tablesWrapper.addEventListener('click', function(event){
+      thisBooking.initTables(event);
+    });
+    thisBooking.dom.bookingForm.addEventListener('submit', function(event){
+      event.preventDefault();
+      thisBooking.sendBooking();
     });
   }
 
@@ -218,8 +236,8 @@ class Booking{
       duration: parseInt(thisBooking.hoursAmount.value),
       ppl: parseInt(thisBooking.peopleAmount.value),
       starters: [],
-      phone: thisBooking.dom.phone.value,
-      address: thisBooking.dom.address.value,
+      phone: thisBooking.dom.phone,
+      address: thisBooking.dom.address,
     };
 
     for (let starter of thisBooking.dom.starters) {
